@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "869007690179",
+    "firebase_url": "https://chatfirebase-progmob.firebaseio.com",
+    "project_id": "chatfirebase-progmob",
+    "storage_bucket": "chatfirebase-progmob.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:869007690179:android:59be40e4c8f81220bd9576",
+        "android_client_info": {
+          "package_name": "com.example.chat_mobile"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "869007690179-dojru0aegj3q1i4n9cak20j2k2angfd3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBKKfJBYuYDGeG35WpGGMd5wkI13NTIXy8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "869007690179-dojru0aegj3q1i4n9cak20j2k2angfd3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Chat_Mobile</string>
+    <string name="login">Entrar</string>
+    <string name="signIn">CADASTRE-SE AQUI!</string>
+    <string name="insert">Cadastrar</string>
+    <string name="foto">Foto</string>
+</resources>
