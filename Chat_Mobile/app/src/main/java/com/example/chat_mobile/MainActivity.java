@@ -68,6 +68,14 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onComplete(@NonNull Task<AuthResult> task) {
                                 Log.i("Teste",task.getResult().getUser().getUid());
+
+                                //Criando Intente para redirecionamento de Tela Após cadastro de usuário
+                                Intent intent = new Intent(MainActivity.this, MessagesActivity.class);
+
+                                //Flags que fazem que as telas sejam movidas
+                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                startActivity(intent);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
