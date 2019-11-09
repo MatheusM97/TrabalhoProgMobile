@@ -10,11 +10,14 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        multiDexEnabled true
+
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            multiDexKeepFile file('multidex-config.txt')
         }
     }
 }
@@ -36,6 +39,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-core:17.0.0'
     //Importando dependecia para usar banco de dados
     implementation 'com.google.firebase:firebase-storage:18.0.0'
+    //Importando dependecia para usar o firestore
+    implementation 'com.google.firebase:firebase-firestore:20.0.0'
+    //Importando dependencia para  evitar problemas  com single dex
+    implementation 'com.android.support:multidex:2.0.1'
 
 
 }

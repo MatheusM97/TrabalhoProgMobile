@@ -4,4 +4,6 @@
     <string name="signIn">CADASTRE-SE AQUI!</string>
     <string name="insert">Cadastrar</string>
     <string name="foto">Foto</string>
+    <string name="contacts">contatos</string>
+    <string name="logout">logout</string>
 </resources>
