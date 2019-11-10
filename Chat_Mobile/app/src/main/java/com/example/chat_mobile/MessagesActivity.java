@@ -44,7 +44,11 @@ public class MessagesActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch(item.getItemId()){
+
+            //Chama a tela de contatos
             case R.id.contacts:
+                Intent intent = new Intent(MessagesActivity.this, ContactsActivity.class);
+                startActivity(intent);
                 break;
             case R.id.logout:
                 FirebaseAuth.getInstance().signOut();
