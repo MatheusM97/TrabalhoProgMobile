@@ -44,6 +44,12 @@ dependencies {
     //Importando dependencia para  evitar problemas  com single dex
     implementation 'com.android.support:multidex:2.0.1'
 
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
+
+    implementation 'com.xwray:groupie:2.1.0'
+
+    implementation 'com.squareup.picasso:picasso:2.71828'
+
 
 }
 //Plugin do firebase Importando
