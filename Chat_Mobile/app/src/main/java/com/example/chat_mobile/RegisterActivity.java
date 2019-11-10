@@ -32,6 +32,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.sql.SQLOutput;
 import java.util.UUID;
 
 public class RegisterActivity extends AppCompatActivity {
@@ -102,7 +103,7 @@ public class RegisterActivity extends AppCompatActivity {
         
         if(requestCode == 0){
             mSelectUri = data.getData();
-
+            System.out.println("aqui olha: " + mSelectUri);
             Bitmap bitmap = null;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectUri);
@@ -162,64 +163,108 @@ public class RegisterActivity extends AppCompatActivity {
         String filename = UUID.randomUUID().toString(); //Gera aleatorio o nome
 
         //Referencia que será criada e armazenada no firebase (imagem do usuário)
-        final StorageReference ref = FirebaseStorage.getInstance().getReference("/images "+ filename);
-        ref.putFile(mSelectUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() { //Faz upload do arquivo para o fire base como jpeg
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        Log.i("Teste", uri.toString());
+        //salvando com foto de perfil
+        if(mSelectUri!=null){
 
-
-
-                        /**Modificações Foram Feitas aqui !! Para gerar um user id no firebase para as mensagens
-                          */
-
-
-                        //Atributos do usuário
-                        String uid = FirebaseAuth.getInstance().getUid();;
-                        String username = mEditUserName.getText().toString();
-                        String profileUrl = uri.toString();
-
-                        //Criando Objeto User
-                        User user = new User(uid,username,profileUrl);
-                        //Salva o user no banco de dados como uma coleção no firebase
-                        FirebaseFirestore.getInstance().collection("users")
-                                .document(uid)
-                                .set(user)
-                                .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-
-                                        //Criando Intente para redirecionamento de Tela Após cadastro de usuário
-                                        Intent intent = new Intent(RegisterActivity.this, MessagesActivity.class);
-
-                                        //Flags que fazem que as telas sejam movidas
-                                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                                        startActivity(intent);
-
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        Log.i("Teste", e.getMessage());
-
-                                    }
-                                });
-                    }
-                });
-
-            }
-        })
-            .addOnFailureListener(new OnFailureListener() {
+            final StorageReference ref = FirebaseStorage.getInstance().getReference("/images "+ filename);
+            ref.putFile(mSelectUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() { //Faz upload do arquivo para o fire base como jpeg
                 @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.e("Teste", e.getMessage());
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Log.i("Teste", uri.toString());
+
+
+
+                            /**Modificações Foram Feitas aqui !! Para gerar um user id no firebase para as mensagens
+                             */
+
+
+                            //Atributos do usuário
+                            String uid = FirebaseAuth.getInstance().getUid();;
+                            String username = mEditUserName.getText().toString();
+                            String profileUrl = uri.toString();
+
+                            //Criando Objeto User
+                            User user = new User(uid,username,profileUrl);
+                            //Salva o user no banco de dados como uma coleção no firebase
+                            FirebaseFirestore.getInstance().collection("users")
+                                    .document(uid)
+                                    .set(user)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+
+                                            //Criando Intente para redirecionamento de Tela Após cadastro de usuário
+                                            Intent intent = new Intent(RegisterActivity.this, MessagesActivity.class);
+
+                                            //Flags que fazem que as telas sejam movidas
+                                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                            startActivity(intent);
+
+                                        }
+                                    })
+                                    .addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+                                            Log.i("Teste", e.getMessage());
+
+                                        }
+                                    });
+                        }
+                    });
+
                 }
-            });
+            })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("Teste", e.getMessage());
+                        }
+                    });
+        }
+        //salvando sem foto de perfil
+        else {
+            /**Modificações Foram Feitas aqui !! Para gerar um user id no firebase para as mensagens
+             */
+
+
+            //Atributos do usuário
+            String uid = FirebaseAuth.getInstance().getUid();;
+            String username = mEditUserName.getText().toString();
+            //String profileUrl = uri.toString();
+
+            //Criando Objeto User
+            User user = new User(uid,username);
+            //Salva o user no banco de dados como uma coleção no firebase
+            FirebaseFirestore.getInstance().collection("users")
+                    .document(uid)
+                    .set(user)
+                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void aVoid) {
+
+                            //Criando Intente para redirecionamento de Tela Após cadastro de usuário
+                            Intent intent = new Intent(RegisterActivity.this, MessagesActivity.class);
+
+                            //Flags que fazem que as telas sejam movidas
+                            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                            startActivity(intent);
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.i("Teste", e.getMessage());
+
+                        }
+                    });
+        }
+
 
 
     }

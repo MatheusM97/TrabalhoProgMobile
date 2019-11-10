@@ -20,6 +20,11 @@ public class User implements Parcelable {
 
     }
 
+    public User(String uuid, String username) {
+        this.uuid = uuid;
+        this.username = username;
+    }
+
     //Contrutor do usuário
     public User(String uuid, String username, String profileUrl) {
         this.uuid = uuid;
