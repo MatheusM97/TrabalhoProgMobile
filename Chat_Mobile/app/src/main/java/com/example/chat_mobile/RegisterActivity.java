@@ -144,9 +144,6 @@ public class RegisterActivity extends AppCompatActivity {
                             saveUserInFirebase();
 
                         }
-
-
-
                     }
                 })
                 //Caso a criação falhe
@@ -174,6 +171,12 @@ public class RegisterActivity extends AppCompatActivity {
                     public void onSuccess(Uri uri) {
                         Log.i("Teste", uri.toString());
 
+
+
+                        /**Modificações Foram Feitas aqui !! Para gerar um user id no firebase para as mensagens
+                          */
+
+
                         //Atributos do usuário
                         String uid = FirebaseAuth.getInstance().getUid();;
                         String username = mEditUserName.getText().toString();
@@ -182,11 +185,12 @@ public class RegisterActivity extends AppCompatActivity {
                         //Criando Objeto User
                         User user = new User(uid,username,profileUrl);
                         //Salva o user no banco de dados como uma coleção no firebase
-                        FirebaseFirestore.getInstance().collection("users").add(user)
-                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        FirebaseFirestore.getInstance().collection("users")
+                                .document(uid)
+                                .set(user)
+                                .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
-                                    public void onSuccess(DocumentReference documentReference) {
-                                        Log.i("Teste", documentReference.getId());
+                                    public void onSuccess(Void aVoid) {
 
                                         //Criando Intente para redirecionamento de Tela Após cadastro de usuário
                                         Intent intent = new Intent(RegisterActivity.this, MessagesActivity.class);
@@ -195,6 +199,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
                                         startActivity(intent);
+
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
