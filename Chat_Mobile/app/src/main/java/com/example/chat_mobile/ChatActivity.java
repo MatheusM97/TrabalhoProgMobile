@@ -49,7 +49,7 @@ public class ChatActivity extends AppCompatActivity {
         user = getIntent().getExtras().getParcelable("user");
         getSupportActionBar().setTitle(user.getUsername());
 
-        RecyclerView rv  = findViewById(R.id.recycler_chat);
+        RecyclerView rv = findViewById(R.id.recycler_chat);
         editChat = findViewById(R.id.edit_chat);
         Button btnChat = findViewById(R.id.btn_chat);
 
@@ -59,7 +59,7 @@ public class ChatActivity extends AppCompatActivity {
                 sendMessage();
             }
 
-          });
+        });
 
         adapter = new GroupAdapter();
         rv.setLayoutManager(new LinearLayoutManager(this));
@@ -81,10 +81,11 @@ public class ChatActivity extends AppCompatActivity {
                 });
 
 
-        }
-     //Método que irá exibir as mensagens na tela
+    }
+
+    //Método que irá exibir as mensagens na tela
     private void fetchMessages() {
-        if(me != null){
+        if (me != null) {
 
             String fromId = me.getUuid();
             String toId = user.getUuid();
@@ -97,19 +98,19 @@ public class ChatActivity extends AppCompatActivity {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                             List<DocumentChange> documentChanges = queryDocumentSnapshots.getDocumentChanges();
-                                if(documentChanges != null){
+                            if (documentChanges != null) {
 
-                                    for (DocumentChange doc: documentChanges) {
+                                for (DocumentChange doc : documentChanges) {
 
-                                        if (doc.getType() == DocumentChange.Type.ADDED){
-                                           Message message = doc.getDocument().toObject(Message.class);
-                                            adapter.add(new MessageItem(message));
+                                    if (doc.getType() == DocumentChange.Type.ADDED) {
+                                        Message message = doc.getDocument().toObject(Message.class);
+                                        adapter.add(new MessageItem(message));
 
 
-                                        }
-                                        
                                     }
+
                                 }
+                            }
 
                         }
                     });
@@ -121,69 +122,88 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     //Método para enviar mensagem
-            private void sendMessage() {
+    private void sendMessage() {
 
-               String text = editChat.getText().toString();
+        String text = editChat.getText().toString();
 
-               editChat.setText(null);
+        editChat.setText(null);
 
-               String fromId = FirebaseAuth.getInstance().getUid();
-               String toId = user.getUuid();
-               long timestamp = System.currentTimeMillis();
+        final String fromId = FirebaseAuth.getInstance().getUid();
+        final String toId = user.getUuid();
 
-               Message message = new Message();
-               message.setFromId(fromId);
-               message.setToId(toId);
-               message.setTimestamp(timestamp);
-               message.setText(text);
+        long timestamp = System.currentTimeMillis();
 
-               //registrar mensagem no firebase
+        final Message message = new Message();
+        message.setFromId(fromId);
+        message.setToId(toId);
+        message.setTimestamp(timestamp);
+        message.setText(text);
 
-                if(!message.getText().isEmpty()){
-                    FirebaseFirestore.getInstance().collection("/conversations")
-                            .document(fromId)
-                            .collection(toId)
-                            .add(message)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    Log.d("Teste", documentReference.getId());
+        //registrar mensagem no firebase
 
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.e("Teste", e.getMessage(), e);
-                                }
+        if (!message.getText().isEmpty()) {
+            FirebaseFirestore.getInstance().collection("/conversations")
+                    .document(fromId)
+                    .collection(toId)
+                    .add(message)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d("Teste", documentReference.getId());
+
+                            Contato contato = new Contato(toId, user.getUsername(), message.getText(), message.getTimestamp(), user.getProfileUrl());
+
+                            FirebaseFirestore.getInstance().collection("ultimas-mensagens")
+                                    .document(fromId)
+                                    .collection("contatos")
+                                    .document(toId)
+                                    .set(contato);
+
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("Teste", e.getMessage(), e);
+                        }
                     });
 
-                    //Duplicando funcionalidade para receber e salvar mensagens do remetente
-                    FirebaseFirestore.getInstance().collection("/conversations")
-                            .document(toId)
-                            .collection(fromId)
-                            .add(message)
-                            .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                @Override
-                                public void onSuccess(DocumentReference documentReference) {
-                                    Log.d("Teste", documentReference.getId());
+            //Duplicando funcionalidade para receber e salvar mensagens do remetente
+            FirebaseFirestore.getInstance().collection("/conversations")
+                    .document(toId)
+                    .collection(fromId)
+                    .add(message)
+                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Log.d("Teste", documentReference.getId());
 
-                                }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Log.e("Teste", e.getMessage(), e);
-                                }
-                            });
+                            Contato contato = new Contato(toId, me.getUsername(), message.getText(), message.getTimestamp(), me.getProfileUrl());
 
-                }
+                            FirebaseFirestore.getInstance().collection("ultimas-mensagens")
+                                    .document(toId)
+                                    .collection("contatos")
+                                    .document(fromId)
+                                    .set(contato);
 
-            }
+
+                        }
+                    })
+                    .addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Log.e("Teste", e.getMessage(), e);
+                        }
+                    });
+
+        }
+
+    }
 
 
     //Método que irá posicionar a mensagem na posição
-    private class MessageItem extends Item<ViewHolder>{
+    private class MessageItem extends Item<ViewHolder> {
 
 
         private final Message message;
@@ -201,8 +221,15 @@ public class ChatActivity extends AppCompatActivity {
 
             //Pega a imagem e texto  dos usuários e envia para a tela de chat
             txtMsg.setText(message.getText());
-            Picasso.get().load(user.getProfileUrl())
-                    .into(imgMessage);
+            //--> Verifica se a mensagem é da pessoa que esta logada ou ro remetente para mostrar a foto da pessoa ou rementente
+            if (message.getFromId().equals(FirebaseAuth.getInstance().getUid())) {
+                Picasso.get().load(me.getProfileUrl())
+                        .into(imgMessage);
+            } else {
+                Picasso.get().load(user.getProfileUrl())
+                        .into(imgMessage);
+            }
+
         }
 
         @Override

@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -63,27 +64,26 @@ public class MainActivity extends AppCompatActivity {
 
                 }
 
-                FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password)
-                        .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                            @Override
-                            public void onComplete(@NonNull Task<AuthResult> task) {
-                                Log.i("Teste",task.getResult().getUser().getUid());
+                FirebaseAuth.getInstance().signInWithEmailAndPassword(email,password).addOnSuccessListener(MainActivity.this, new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
 
-                                //Criando Intente para redirecionamento de Tela Após cadastro de usuário
-                                Intent intent = new Intent(MainActivity.this, MessagesActivity.class);
+                        System.out.println("aquiiiii" + authResult);
+                        //Criando Intente para redirecionamento de Tela Após cadastro de usuário
+                        Intent intent = new Intent(MainActivity.this, MessagesActivity.class);
 
-                                //Flags que fazem que as telas sejam movidas
-                                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        //Flags que fazem que as telas sejam movidas
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                                startActivity(intent);
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Log.i("Teste", e.getMessage());
-                            }
-                        });
+                        startActivity(intent);
+                    }
+
+                });
+
+
+
+
+
 
             }
         });
