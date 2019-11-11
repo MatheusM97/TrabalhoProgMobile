@@ -78,6 +78,11 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
 
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(MainActivity.this, "E-mail ou senha errada",Toast.LENGTH_LONG).show();
+                    }
                 });
 
 
