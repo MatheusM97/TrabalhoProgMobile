@@ -107,9 +107,16 @@ public class ContactsActivity extends AppCompatActivity {
                 //Carrega o nome dos contatos
                txtUsername.setText(user.getUsername());
 
-               //Carrega as fotos dos usuários
-               Picasso.get().load(user.getProfileUrl())
-                       .into(imgPhoto);
+               if(user.getProfileUrl()!=null){
+                   //Carrega as fotos dos usuários
+                   Picasso.get().load(user.getProfileUrl())
+                           .into(imgPhoto);
+               }
+               else{
+                   Picasso.get().load(R.drawable.avatarpadrao)
+                           .into(imgPhoto);
+               }
+
         }
 
         @Override

@@ -7,9 +7,17 @@ public class Contato {
     private String ultimaMensagem;
     private long timeStamp;
     private String fotoURL;
-
+    private User user;
     public Contato() {
 
+    }
+    public Contato(String uuid, String nomeUsuario, String ultimaMensagem, long timeStamp, String fotoURL,User user) {
+        this.uuid = uuid;
+        this.nomeUsuario = nomeUsuario;
+        this.ultimaMensagem = ultimaMensagem;
+        this.timeStamp = timeStamp;
+        this.fotoURL = fotoURL;
+        this.user = user;
     }
 
     public Contato(String uuid, String nomeUsuario, String ultimaMensagem, long timeStamp, String fotoURL) {
@@ -25,6 +33,14 @@ public class Contato {
         this.ultimaMensagem = ultimaMensagem;
         this.timeStamp = timeStamp;
         this.fotoURL = fotoURL;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public String getUuid() {

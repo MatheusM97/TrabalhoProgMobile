@@ -151,7 +151,7 @@ public class ChatActivity extends AppCompatActivity {
                         public void onSuccess(DocumentReference documentReference) {
                             Log.d("Teste", documentReference.getId());
 
-                            Contato contato = new Contato(toId, user.getUsername(), message.getText(), message.getTimestamp(), user.getProfileUrl());
+                            Contato contato = new Contato(toId, user.getUsername(), message.getText(), message.getTimestamp(), user.getProfileUrl(),user);
 
                             FirebaseFirestore.getInstance().collection("ultimas-mensagens")
                                     .document(fromId)
@@ -179,7 +179,7 @@ public class ChatActivity extends AppCompatActivity {
                         public void onSuccess(DocumentReference documentReference) {
                             Log.d("Teste", documentReference.getId());
 
-                            Contato contato = new Contato(toId, me.getUsername(), message.getText(), message.getTimestamp(), me.getProfileUrl());
+                            Contato contato = new Contato(fromId, me.getUsername(), message.getText(), message.getTimestamp(), me.getProfileUrl(),me);
 
                             FirebaseFirestore.getInstance().collection("ultimas-mensagens")
                                     .document(toId)
@@ -223,11 +223,23 @@ public class ChatActivity extends AppCompatActivity {
             txtMsg.setText(message.getText());
             //--> Verifica se a mensagem é da pessoa que esta logada ou ro remetente para mostrar a foto da pessoa ou rementente
             if (message.getFromId().equals(FirebaseAuth.getInstance().getUid())) {
-                Picasso.get().load(me.getProfileUrl())
-                        .into(imgMessage);
+                if(me.getProfileUrl()==null){
+                    Picasso.get().load(R.drawable.avatarpadrao)
+                            .into(imgMessage);
+                }else{
+                    Picasso.get().load(me.getProfileUrl())
+                            .into(imgMessage);
+                }
+
+
             } else {
-                Picasso.get().load(user.getProfileUrl())
-                        .into(imgMessage);
+                if(user.getProfileUrl()==null){
+                    Picasso.get().load(R.drawable.avatarpadrao)
+                            .into(imgMessage);
+                }else{
+                    Picasso.get().load(user.getProfileUrl())
+                            .into(imgMessage);
+                }
             }
 
         }

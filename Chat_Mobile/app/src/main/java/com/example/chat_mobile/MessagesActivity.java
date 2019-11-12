@@ -10,18 +10,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.squareup.picasso.Picasso;
 import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.Item;
+import com.xwray.groupie.OnItemClickListener;
 import com.xwray.groupie.ViewHolder;
 
 import java.util.List;
@@ -39,6 +44,28 @@ public class MessagesActivity extends AppCompatActivity {
         adapter = new GroupAdapter();
         rv.setAdapter(adapter);
 
+        rv.setLayoutManager(new LinearLayoutManager(this));
+        adapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(@NonNull Item item, @NonNull View view) {
+
+                Intent intent = new Intent(MessagesActivity.this, ChatActivity.class);
+               // MainActivity.ContatoItem contatoItem = (MainActivity.ContatoItem) item;
+
+
+                ContatoItem contatoItem= (ContatoItem)  item;
+
+
+
+                Toast.makeText(MessagesActivity.this,contatoItem.contato.getUuid() ,Toast.LENGTH_LONG).show();
+                intent.putExtra("user", contatoItem.contato.getUser());
+                startActivity(intent);
+                /*ContactsActivity.UserItem userItem = (ContactsActivity.UserItem)  item;
+                intent.putExtra("user", userItem.user);
+                startActivity(intent);*/
+            }
+        });
+
         //Método que verifica se o usuário esta logado
         verifyAuthentication();
 
@@ -52,6 +79,7 @@ public class MessagesActivity extends AppCompatActivity {
         FirebaseFirestore.getInstance().collection("ultimas-mensagens")
                 .document(uid)
                 .collection("contatos")
+                .orderBy("timeStamp", Query.Direction.DESCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -116,6 +144,7 @@ public class MessagesActivity extends AppCompatActivity {
             this.contato = c;
         }
 
+
         @Override
         public void bind(@NonNull ViewHolder viewHolder, int position) {
             TextView nomeUsuario = viewHolder.itemView.findViewById(R.id.nomeUsuario);
@@ -125,9 +154,17 @@ public class MessagesActivity extends AppCompatActivity {
             nomeUsuario.setText(contato.getNomeUsuario());
 
             mensagem.setText(contato.getUltimaMensagem());
-            Picasso.get()
-                    .load(contato.getFotoURL())
-                    .into(img);
+
+            if(contato.getFotoURL()==null){
+                Picasso.get()
+                        .load(R.drawable.avatarpadrao)
+                        .into(img);
+            }else{
+                Picasso.get()
+                        .load(contato.getFotoURL())
+                        .into(img);
+            }
+
         }
 
         @Override

@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onSuccess(AuthResult authResult) {
 
-                        System.out.println("aquiiiii" + authResult);
+
                         //Criando Intente para redirecionamento de Tela Após cadastro de usuário
                         Intent intent = new Intent(MainActivity.this, MessagesActivity.class);
 
