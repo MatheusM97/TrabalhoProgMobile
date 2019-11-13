@@ -1,8 +1,5 @@
 package com.example.chat_mobile;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,10 +9,11 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
@@ -70,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                         //Criando Intente para redirecionamento de Tela Após cadastro de usuário
-                        Intent intent = new Intent(MainActivity.this, MessagesActivity.class);
+                        Intent intent = new Intent(MainActivity.this, MensagensActivity.class);
 
                         //Flags que fazem que as telas sejam movidas
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -97,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         mTxtAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, RegisterActivity.class);
+                Intent intent = new Intent(MainActivity.this, RegistrarUsuarioActivity.class);
                 startActivity(intent);
             }
         });

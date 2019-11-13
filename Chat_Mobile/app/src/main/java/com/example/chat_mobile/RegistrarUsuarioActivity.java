@@ -1,9 +1,5 @@
 package com.example.chat_mobile;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -15,27 +11,27 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
-import java.sql.SQLOutput;
 import java.util.UUID;
 
-public class RegisterActivity extends AppCompatActivity {
+public class RegistrarUsuarioActivity extends AppCompatActivity {
 
 
     //Declarando variáveis que serão usadas posteriormente e importadas do layout
@@ -53,57 +49,41 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_register);
+        setContentView(R.layout.activity_registrar_usuario);
 
         //Relacionando as variaves com o layout
         mEditUserName = findViewById(R.id.edit_nome);
         mEditEmail = findViewById(R.id.edit_email);
         mEditPassword = findViewById(R.id.edit_password);
-        mBtnInsert = findViewById(R.id.btn_cadastrar);
         mImgPhoto = findViewById(R.id.img_photo);
-        mBtnSelectedPhoto = findViewById(R.id.btn_Selected_photo); //--> Será usado para inserir foto
+        mBtnInsert = findViewById(R.id.btn_cadastrar);
+        mBtnSelectedPhoto = findViewById(R.id.btn_Selecionar_foto); //--> Será usado para inserir foto
 
 
-        //Ação do botão para adicionar foto
-        mBtnSelectedPhoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                selectPhoto();
-
-            }
-        });
-
-        //Ação do botão de cadastrar
-        mBtnInsert.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createUser(); //---> Cria o usuário
-            }
-
-
-        });
 
     }
 
-    //Método para adicionar foto
-    private void selectPhoto() {
+
+
+    public void selecionarFoto(View view) {
+        adicionarFoto();
+    }
+    //método para adicionar fotos
+    private void adicionarFoto() {
         //Pega a galeria
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setType("image/*"); //--> Procura na galeria arquivos do tipo imagem
         startActivityForResult(intent, 0); //--> Abre a galeria do dispositivo para receber dado
-
     }
 
-
-    //Método que retorna os dados da Galeria 
+    //Método que retorna os dados da Galeria
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        
+
         if(requestCode == 0){
             mSelectUri = data.getData();
-            System.out.println("aqui olha: " + mSelectUri);
+
             Bitmap bitmap = null;
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectUri);
@@ -116,9 +96,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         }
     }
+    public void cadastrar(View view) {
+        criarUsuario();
+    }
 
     //Método para Criar/Registrar usuário
-    private void createUser() {
+    private void criarUsuario() {
         String email = mEditEmail.getText().toString();
         String senha = mEditPassword.getText().toString();
         String name = mEditUserName.getText().toString();
@@ -139,10 +122,9 @@ public class RegisterActivity extends AppCompatActivity {
                     //Caso a criação seja feita com sucesso
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if(task.isSuccessful()){
-                            Log.i("Teste", task.getResult().getUser().getUid());
 
                             //Método para salvar
-                            saveUserInFirebase();
+                            salvarUsuarioInFirebase();
 
                         }
                     }
@@ -151,7 +133,7 @@ public class RegisterActivity extends AppCompatActivity {
                 .addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        Log.i("Teste",e.getMessage());
+                        Log.i("Falhou",e.getMessage());
 
                     }
                 });
@@ -159,7 +141,7 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     //Método que salva arquivos no firebase ( Upload de fotos)
-    private void saveUserInFirebase() {
+    private void  salvarUsuarioInFirebase() {
         String filename = UUID.randomUUID().toString(); //Gera aleatorio o nome
 
         //Referencia que será criada e armazenada no firebase (imagem do usuário)
@@ -197,7 +179,7 @@ public class RegisterActivity extends AppCompatActivity {
                                         public void onSuccess(Void aVoid) {
 
                                             //Criando Intente para redirecionamento de Tela Após cadastro de usuário
-                                            Intent intent = new Intent(RegisterActivity.this, MessagesActivity.class);
+                                            Intent intent = new Intent(RegistrarUsuarioActivity.this, MensagensActivity.class);
 
                                             //Flags que fazem que as telas sejam movidas
                                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -209,7 +191,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     .addOnFailureListener(new OnFailureListener() {
                                         @Override
                                         public void onFailure(@NonNull Exception e) {
-                                            Log.i("Teste", e.getMessage());
+                                            Log.i("Falhou", e.getMessage());
 
                                         }
                                     });
@@ -221,7 +203,7 @@ public class RegisterActivity extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.e("Teste", e.getMessage());
+                            Log.e("Falhou ", e.getMessage());
                         }
                     });
         }
@@ -247,7 +229,7 @@ public class RegisterActivity extends AppCompatActivity {
                         public void onSuccess(Void aVoid) {
 
                             //Criando Intente para redirecionamento de Tela Após cadastro de usuário
-                            Intent intent = new Intent(RegisterActivity.this, MessagesActivity.class);
+                            Intent intent = new Intent(RegistrarUsuarioActivity.this, MensagensActivity.class);
 
                             //Flags que fazem que as telas sejam movidas
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -259,7 +241,7 @@ public class RegisterActivity extends AppCompatActivity {
                     .addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.i("Teste", e.getMessage());
+                            Log.i("Falhou: ", e.getMessage());
 
                         }
                     });

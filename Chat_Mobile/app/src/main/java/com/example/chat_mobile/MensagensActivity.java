@@ -1,11 +1,5 @@
 package com.example.chat_mobile;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Menu;
@@ -15,8 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -30,14 +29,14 @@ import com.xwray.groupie.OnItemClickListener;
 import com.xwray.groupie.ViewHolder;
 
 import java.util.List;
-
-public class MessagesActivity extends AppCompatActivity {
+//classe responsavel por exibir mensagens na tela
+public class MensagensActivity extends AppCompatActivity {
     private GroupAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_messages);
+        setContentView(R.layout.activity_mensagens);
         RecyclerView rv = findViewById(R.id.recycler);
         rv.setLayoutManager(new LinearLayoutManager(this));
 
@@ -49,7 +48,7 @@ public class MessagesActivity extends AppCompatActivity {
             @Override
             public void onItemClick(@NonNull Item item, @NonNull View view) {
 
-                Intent intent = new Intent(MessagesActivity.this, ChatActivity.class);
+                Intent intent = new Intent(MensagensActivity.this, ChatActivity.class);
                // MainActivity.ContatoItem contatoItem = (MainActivity.ContatoItem) item;
 
 
@@ -57,10 +56,10 @@ public class MessagesActivity extends AppCompatActivity {
 
 
 
-                Toast.makeText(MessagesActivity.this,contatoItem.contato.getUuid() ,Toast.LENGTH_LONG).show();
+                Toast.makeText(MensagensActivity.this,contatoItem.contato.getUuid() ,Toast.LENGTH_LONG).show();
                 intent.putExtra("user", contatoItem.contato.getUser());
                 startActivity(intent);
-                /*ContactsActivity.UserItem userItem = (ContactsActivity.UserItem)  item;
+                /*ContatosActivity.UserItem userItem = (ContatosActivity.UserItem)  item;
                 intent.putExtra("user", userItem.user);
                 startActivity(intent);*/
             }
@@ -79,7 +78,7 @@ public class MessagesActivity extends AppCompatActivity {
         FirebaseFirestore.getInstance().collection("ultimas-mensagens")
                 .document(uid)
                 .collection("contatos")
-                .orderBy("timeStamp", Query.Direction.DESCENDING)
+                .orderBy("timeStamp", Query.Direction.ASCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -101,7 +100,7 @@ public class MessagesActivity extends AppCompatActivity {
 
     public void verifyAuthentication() {
         if (FirebaseAuth.getInstance().getUid() == null) {
-            Intent intent = new Intent(MessagesActivity.this, MainActivity.class);
+            Intent intent = new Intent(MensagensActivity.this, MainActivity.class);
 
             //Flags que fazem que as telas sejam movidas
             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -126,7 +125,7 @@ public class MessagesActivity extends AppCompatActivity {
 
             //Chama a tela de contatos
             case R.id.contacts:
-                Intent intent = new Intent(MessagesActivity.this, ContactsActivity.class);
+                Intent intent = new Intent(MensagensActivity.this, ContatosActivity.class);
                 startActivity(intent);
                 break;
             case R.id.logout:

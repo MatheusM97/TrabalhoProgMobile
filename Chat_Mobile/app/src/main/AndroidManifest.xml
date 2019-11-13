@@ -12,23 +12,23 @@
         <activity android:name=".ChatActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MessagesActivity" />
+                android:value=".MensagensActivity" />
         </activity>
         <activity
-            android:name=".ContactsActivity"
+            android:name=".ContatosActivity"
             android:label="@string/contacts">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".MessagesActivity" />
+                android:value=".MensagensActivity" />
         </activity>
-        <activity android:name=".MessagesActivity">
+        <activity android:name=".MensagensActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".RegisterActivity" />
+        <activity android:name=".RegistrarUsuarioActivity" />
         <activity android:name=".MainActivity" />
     </application>
 

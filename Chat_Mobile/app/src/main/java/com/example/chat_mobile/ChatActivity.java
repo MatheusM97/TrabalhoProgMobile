@@ -1,21 +1,20 @@
 package com.example.chat_mobile;
 
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-import android.os.Parcelable;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
-
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
@@ -40,7 +39,8 @@ public class ChatActivity extends AppCompatActivity {
     private User user;
     private EditText editChat;
     private User me;
-
+    //pegando a hora do TimeStamp
+    private Timestamp tempo = Timestamp.now();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,22 +51,12 @@ public class ChatActivity extends AppCompatActivity {
 
         RecyclerView rv = findViewById(R.id.recycler_chat);
         editChat = findViewById(R.id.edit_chat);
-        Button btnChat = findViewById(R.id.btn_chat);
-
-        btnChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendMessage();
-            }
-
-        });
-
         adapter = new GroupAdapter();
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
 
 
-        //Puxa do banco de dados as mensagens enviadas
+        //Puxa do banco de dados as mensagens enviadas pelo usuario logado
         FirebaseFirestore.getInstance().collection("/users")
                 .document(FirebaseAuth.getInstance().getUid())
                 .get()
@@ -75,7 +65,7 @@ public class ChatActivity extends AppCompatActivity {
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
 
                         me = documentSnapshot.toObject(User.class);
-                        fetchMessages();
+                        mostrarMensagens();
 
                     }
                 });
@@ -84,7 +74,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     //Método que irá exibir as mensagens na tela
-    private void fetchMessages() {
+    private void mostrarMensagens() {
         if (me != null) {
 
             String fromId = me.getUuid();
@@ -122,7 +112,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     //Método para enviar mensagem
-    private void sendMessage() {
+    private void enviarMensagens() {
 
         String text = editChat.getText().toString();
 
@@ -131,8 +121,10 @@ public class ChatActivity extends AppCompatActivity {
         final String fromId = FirebaseAuth.getInstance().getUid();
         final String toId = user.getUuid();
 
-        long timestamp = System.currentTimeMillis();
 
+
+        long  timestamp = tempo.getSeconds();;
+        
         final Message message = new Message();
         message.setFromId(fromId);
         message.setToId(toId);
@@ -199,6 +191,11 @@ public class ChatActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    public void enviar(View view) {
+
+        enviarMensagens();
     }
 
 

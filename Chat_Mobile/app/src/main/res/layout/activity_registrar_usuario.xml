@@ -8,7 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/bgColor"
-    tools:context=".RegisterActivity">
+    tools:context=".RegistrarUsuarioActivity">
 
 
     <EditText
@@ -29,7 +29,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_Selected_photo" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_Selecionar_foto" />
 
     <EditText
         android:id="@+id/edit_email"
@@ -72,9 +72,10 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:background="@drawable/bg_button_rounded"
+        android:background="@drawable/bt_submit"
         android:textColor="#FFFFFF"
         android:text="@string/insert"
+        android:onClick="cadastrar"
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/edit_password"
@@ -82,13 +83,15 @@
         app:layout_constraintTop_toBottomOf="@+id/edit_password" />
 
     <Button
-        android:id="@+id/btn_Selected_photo"
+        android:id="@+id/btn_Selecionar_foto"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:layout_marginTop="76dp"
         android:text="@string/foto"
-        android:textColor="@android:color/white"
-        android:background="@drawable/bg_button_imgrounded"
+        android:onClick="selecionarFoto"
+        android:background="@drawable/avatarpadrao"
+        android:textColor="@android:color/black"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -100,10 +103,10 @@
         app:civ_border_color="@color/colorPrimary"
         android:layout_width="150dp"
         android:layout_height="150dp"
-        app:layout_constraintBottom_toBottomOf="@+id/btn_Selected_photo"
-        app:layout_constraintEnd_toEndOf="@+id/btn_Selected_photo"
-        app:layout_constraintStart_toStartOf="@+id/btn_Selected_photo"
-        app:layout_constraintTop_toTopOf="@+id/btn_Selected_photo"
+        app:layout_constraintBottom_toBottomOf="@+id/btn_Selecionar_foto"
+        app:layout_constraintEnd_toEndOf="@+id/btn_Selecionar_foto"
+        app:layout_constraintStart_toStartOf="@+id/btn_Selecionar_foto"
+        app:layout_constraintTop_toTopOf="@+id/btn_Selecionar_foto"
         />
 
 

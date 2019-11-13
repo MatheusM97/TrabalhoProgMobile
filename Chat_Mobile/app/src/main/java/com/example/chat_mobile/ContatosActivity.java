@@ -1,16 +1,16 @@
 package com.example.chat_mobile;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -28,14 +28,14 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-public class ContactsActivity extends AppCompatActivity {
+public class ContatosActivity extends AppCompatActivity {
 
     private GroupAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contacts);
+        setContentView(R.layout.activity_contatos);
 
         RecyclerView rv = findViewById(R.id.recycler);
 
@@ -50,7 +50,7 @@ public class ContactsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(@NonNull Item item, @NonNull View view) {
 
-               Intent intent = new Intent(ContactsActivity.this, ChatActivity.class);
+               Intent intent = new Intent(ContatosActivity.this, ChatActivity.class);
 
                UserItem userItem = (UserItem)  item;
                intent.putExtra("user", userItem.user);
@@ -59,10 +59,10 @@ public class ContactsActivity extends AppCompatActivity {
         });
 
 
-        fetchUsers();
+        buscarUsuarios();
     }
 
-    private void fetchUsers() {
+    private void buscarUsuarios() {
 
         FirebaseFirestore.getInstance().collection("/users")
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
