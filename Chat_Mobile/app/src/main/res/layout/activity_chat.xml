@@ -46,6 +46,7 @@
         android:background="@color/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
+
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -89,9 +90,10 @@
         app:layout_constraintTop_toTopOf="@+id/toolbar" />
 
     <ImageButton
-        android:id="@+id/imageButton12"
+        android:id="@+id/selecionarImagem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:onClick="selecionarImagem"
         app:layout_constraintBottom_toBottomOf="@+id/edit_chat"
         app:layout_constraintEnd_toStartOf="@+id/btn_chat"
         app:layout_constraintStart_toEndOf="@+id/edit_chat"

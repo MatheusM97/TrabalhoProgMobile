@@ -7,6 +7,15 @@ public class Message {
     private long timestamp;
     private String fromId;
     private  String toId;
+    private String imagemURL;
+
+    public String getImagemURL() {
+        return imagemURL;
+    }
+
+    public void setImagemURL(String imagemURL) {
+        this.imagemURL = imagemURL;
+    }
 
     public String getText() {
         return text;
