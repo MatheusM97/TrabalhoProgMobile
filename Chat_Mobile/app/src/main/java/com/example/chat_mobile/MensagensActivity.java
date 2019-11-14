@@ -36,6 +36,13 @@ public class MensagensActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
+
+    }
+    public void onResume(){
+        super.onResume();
+
         setContentView(R.layout.activity_mensagens);
         RecyclerView rv = findViewById(R.id.recycler);
         rv.setLayoutManager(new LinearLayoutManager(this));
@@ -49,7 +56,7 @@ public class MensagensActivity extends AppCompatActivity {
             public void onItemClick(@NonNull Item item, @NonNull View view) {
 
                 Intent intent = new Intent(MensagensActivity.this, ChatActivity.class);
-               // MainActivity.ContatoItem contatoItem = (MainActivity.ContatoItem) item;
+                // MainActivity.ContatoItem contatoItem = (MainActivity.ContatoItem) item;
 
 
                 ContatoItem contatoItem= (ContatoItem)  item;
@@ -69,6 +76,8 @@ public class MensagensActivity extends AppCompatActivity {
         verifyAuthentication();
 
         buscarUltimaMensagem();
+
+
     }
 
     private void buscarUltimaMensagem() {
