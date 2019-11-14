@@ -39,6 +39,7 @@ public class ChatActivity extends AppCompatActivity {
     private User user;
     private EditText editChat;
     private User me;
+
     //pegando a hora do TimeStamp
     private Timestamp tempo = Timestamp.now();
     @Override
