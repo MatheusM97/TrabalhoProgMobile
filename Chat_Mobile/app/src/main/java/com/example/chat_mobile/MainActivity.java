@@ -70,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                         //Criando Intente para redirecionamento de Tela Após cadastro de usuário
                         Intent intent = new Intent(MainActivity.this, MensagensActivity.class);
 
-                        //Flags que fazem que as telas sejam movidas
+                        //Flags que fazem que as telas sejam movidas e a a tela de mensagens passa a ser a activity principal
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
                         startActivity(intent);

@@ -37,6 +37,7 @@ import com.xwray.groupie.Item;
 import com.xwray.groupie.ViewHolder;
 
 import java.util.List;
+import java.util.UUID;
 
 import javax.annotation.Nullable;
 
@@ -224,8 +225,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void enviarMensagemImagem() {
-
-        final StorageReference ref = FirebaseStorage.getInstance().getReference("/images ");
+        String nomeUnico = UUID.randomUUID().toString();
+        final StorageReference ref = FirebaseStorage.getInstance().getReference("/images " + nomeUnico);
         ref.putFile(mSelectUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
