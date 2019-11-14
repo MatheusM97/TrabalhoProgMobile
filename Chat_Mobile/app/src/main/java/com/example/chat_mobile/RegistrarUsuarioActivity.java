@@ -142,13 +142,13 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
 
     //Método que salva arquivos no firebase ( Upload de fotos)
     private void  salvarUsuarioInFirebase() {
-        String filename = UUID.randomUUID().toString(); //Gera aleatorio o nome
+        String nomeUnicoAleatorio = UUID.randomUUID().toString(); //Gera aleatorio o nome
 
         //Referencia que será criada e armazenada no firebase (imagem do usuário)
         //salvando com foto de perfil
         if(mSelectUri!=null){
 
-            final StorageReference ref = FirebaseStorage.getInstance().getReference("/images "+ filename);
+            final StorageReference ref = FirebaseStorage.getInstance().getReference("/images "+ nomeUnicoAleatorio);
             ref.putFile(mSelectUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() { //Faz upload do arquivo para o fire base como jpeg
                 @Override
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

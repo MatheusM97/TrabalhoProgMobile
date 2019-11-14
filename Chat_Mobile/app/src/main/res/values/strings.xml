@@ -1,12 +1,12 @@
 <resources>
     <string name="app_name">Chat_Mobile</string>
-    <string name="login">Entrar</string>
-    <string name="signIn">CADASTRE-SE AQUI!</string>
-    <string name="insert">Cadastrar</string>
-    <string name="foto">Foto</string>
-    <string name="contacts">contatos</string>
+    <string name="login">Sign-In</string>
+    <string name="signIn">Sign-Up</string>
+    <string name="insert">Done</string>
+    <string name="foto">Photo</string>
+    <string name="contacts">contacts</string>
     <string name="logout">logout</string>
     <string name="textview">TextView</string>
-    <string name="btn_chat">enviar</string>
-    <string name="message">Digite a menssagem</string>
+    <string name="btn_chat">send</string>
+    <string name="message">Wirten a message</string>
 </resources>
