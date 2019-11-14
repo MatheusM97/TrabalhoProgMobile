@@ -1,10 +1,8 @@
 package com.example.chat_mobile;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -38,7 +36,6 @@ import com.xwray.groupie.GroupAdapter;
 import com.xwray.groupie.Item;
 import com.xwray.groupie.ViewHolder;
 
-import java.io.IOException;
 import java.util.List;
 
 import javax.annotation.Nullable;
@@ -320,20 +317,12 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @androidx.annotation.Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
+        //verifica se foi intenção 0 do selecionar fotos
         if(requestCode == 0){
             mSelectUri = data.getData();
 
-            Bitmap bitmap = null;
-            try {
-                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectUri);
-
-                select.setAlpha(0);
                 enviarMensagemImagem();
 
-            } catch (IOException e) {
-
-            }
 
         }
     }
