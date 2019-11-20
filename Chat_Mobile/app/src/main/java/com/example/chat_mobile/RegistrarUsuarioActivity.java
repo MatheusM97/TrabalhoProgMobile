@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.FileProvider;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -28,7 +30,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 public class RegistrarUsuarioActivity extends AppCompatActivity {
@@ -45,7 +50,7 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
 
     private Uri mSelectUri;
 
-
+    private String currentPhotoPath; //salva o caminho da foto tirada pela camera
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,10 +93,27 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectUri);
                 mImgPhoto.setImageDrawable(new BitmapDrawable(bitmap));
-                mBtnSelectedPhoto.setAlpha(0);
+                //mBtnSelectedPhoto.setAlpha(0);
 
             } catch (IOException e) {
 
+            }
+
+        }
+        //caso a foto venha da camesa
+        if (requestCode == 1 && resultCode == RESULT_OK) {
+           //pegando o caminho e extraindo a url da foto tirada pela camera
+            File f = new File(currentPhotoPath);
+            mSelectUri = Uri.fromFile(f);
+            //System.out.println(mSelectUri);
+            //mSelectUri = extras.get("data");
+            Bitmap imageBitmap = null;
+            try {
+                imageBitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), mSelectUri);
+                mImgPhoto.setImageDrawable(new BitmapDrawable(imageBitmap));
+                //mBtnSelectedPhoto.setAlpha(0);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
         }
@@ -249,5 +271,47 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public void tirarFoto(View view) {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        // Ensure that there's a camera activity to handle the intent
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            // Create the File where the photo should go
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException ex) {
+                // Error occurred while creating the File
+
+            }
+            // Continue only if the File was successfully created
+            if (photoFile != null) {
+               Uri photo = FileProvider.getUriForFile(this,
+                        "com.example.chat_mobile.provider",
+                        photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photo);
+                startActivityForResult(takePictureIntent, 1);
+            }
+        }
+
+    }
+
+
+
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
     }
 }
