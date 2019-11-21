@@ -62,7 +62,7 @@ public class EditarUsuario extends AppCompatActivity {
         mEditEmail = findViewById(R.id.edit_email1);
         mEditPassword = findViewById(R.id.edit_password1);
         mImgPhoto = findViewById(R.id.img_photo1);
-        mBtnInsert = findViewById(R.id.btn_cadastrar);
+        mBtnInsert = findViewById(R.id.btn_cadastrar1);
         mBtnSelectedPhoto = findViewById(R.id.btn_Selecionar_foto);
        // mEditNewPassword = findViewById(R.id.edit_NewPassword);
         FirebaseFirestore.getInstance().collection("/users")
@@ -306,7 +306,7 @@ public class EditarUsuario extends AppCompatActivity {
 
 
             //Atributos do usuário
-            String uid = FirebaseAuth.getInstance().getUid();;
+            String uid = FirebaseAuth.getInstance().getUid();
             String username = mEditUserName.getText().toString();
             //String profileUrl = uri.toString();
 
@@ -383,5 +383,10 @@ public class EditarUsuario extends AppCompatActivity {
         // Save a file: path for use with ACTION_VIEW intents
         currentPhotoPath = image.getAbsolutePath();
         return image;
+    }
+
+    public void cancel(View view) {
+        Intent intente = new Intent(EditarUsuario.this,MensagensActivity.class);
+        startActivity(intente);
     }
 }

@@ -208,7 +208,7 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
 
 
                             //Atributos do usuário
-                            String uid = FirebaseAuth.getInstance().getUid();;
+                            String uid = FirebaseAuth.getInstance().getUid();
                             String username = mEditUserName.getText().toString();
                             String profileUrl = uri.toString();
 
@@ -258,7 +258,7 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
 
 
             //Atributos do usuário
-            String uid = FirebaseAuth.getInstance().getUid();;
+            String uid = FirebaseAuth.getInstance().getUid();
             String username = mEditUserName.getText().toString();
             //String profileUrl = uri.toString();
 
