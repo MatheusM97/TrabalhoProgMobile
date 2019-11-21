@@ -7,8 +7,8 @@
         app:showAsAction="always"/>
 
 
-    <item android:id="@+id/perfil"
-        android:title="perfil" />
+    <item android:id="@+id/profile"
+        android:title="profile" />
     <item android:id="@+id/logout"
          android:title="@string/logout" />
 

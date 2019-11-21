@@ -50,6 +50,7 @@ public class ChatActivity extends AppCompatActivity {
     private Toolbar to;
     private Uri mSelectUri;
     private ImageButton select;
+    private ImageView imagePerfil;
     //pegando a hora do TimeStamp
     private Timestamp tempo = Timestamp.now();
     @Override
@@ -58,8 +59,20 @@ public class ChatActivity extends AppCompatActivity {
         to = findViewById(R.id.toolbar);
         setContentView(R.layout.activity_chat);
 
+        //to.set
         user = getIntent().getExtras().getParcelable("user");
-        //setSupportActionBar(to);
+        //getActionBar().setTitle(user.getUsername());
+        getSupportActionBar().setTitle(user.getUsername());
+
+        imagePerfil = findViewById(R.id.img_user);
+        if(user.getProfileUrl()!=null){
+            Picasso.get().load(user.getProfileUrl())
+                    .into(imagePerfil);
+        }else{
+            Picasso.get().load(R.drawable.avatarpadrao)
+                    .into(imagePerfil);
+        }
+
 
         RecyclerView rv = findViewById(R.id.recycler_chat);
         editChat = findViewById(R.id.edit_chat);

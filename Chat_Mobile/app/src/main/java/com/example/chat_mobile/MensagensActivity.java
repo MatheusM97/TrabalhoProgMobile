@@ -74,7 +74,7 @@ public class MensagensActivity extends AppCompatActivity {
 
         //Método que verifica se o usuário esta logado
         verifyAuthentication();
-
+        if (FirebaseAuth.getInstance().getUid() != null)
         buscarUltimaMensagem();
 
 
@@ -141,6 +141,11 @@ public class MensagensActivity extends AppCompatActivity {
                 FirebaseAuth.getInstance().signOut();
                 verifyAuthentication();
                 break;
+            case R.id.profile:
+                Intent intent1 = new Intent(MensagensActivity.this,EditarUsuario.class);
+                startActivity(intent1);
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }

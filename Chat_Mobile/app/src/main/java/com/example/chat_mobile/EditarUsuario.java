@@ -23,15 +23,17 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,39 +41,56 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
-public class RegistrarUsuarioActivity extends AppCompatActivity {
-
-
-    //Declarando variáveis que serão usadas posteriormente e importadas do layout
-
+public class EditarUsuario extends AppCompatActivity {
     private EditText mEditUserName;
     private EditText mEditEmail;
     private EditText mEditPassword;
+    private EditText mEditNewPassword;
     private Button mBtnInsert;
     private  Button mBtnSelectedPhoto;
     private ImageView mImgPhoto;
-
+    private User me;
     private Uri mSelectUri;
-
-    private String currentPhotoPath; //salva o caminho da foto tirada pela camera
+    private FirebaseUser user;
+    private String currentPhotoPath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_registrar_usuario);
+        setContentView(R.layout.activity_editar_usuario);
 
-        //Relacionando as variaves com o layout
-        mEditUserName = findViewById(R.id.edit_nome);
-        mEditEmail = findViewById(R.id.edit_email);
-        mEditPassword = findViewById(R.id.edit_password);
-        mImgPhoto = findViewById(R.id.img_photo);
+        mEditUserName = findViewById(R.id.edit_nome1);
+        mEditEmail = findViewById(R.id.edit_email1);
+        mEditPassword = findViewById(R.id.edit_password1);
+        mImgPhoto = findViewById(R.id.img_photo1);
         mBtnInsert = findViewById(R.id.btn_cadastrar);
-        mBtnSelectedPhoto = findViewById(R.id.btn_Selecionar_foto); //--> Será usado para inserir foto
+        mBtnSelectedPhoto = findViewById(R.id.btn_Selecionar_foto);
+       // mEditNewPassword = findViewById(R.id.edit_NewPassword);
+        FirebaseFirestore.getInstance().collection("/users")
+                .document(FirebaseAuth.getInstance().getUid())
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
 
+                        me = documentSnapshot.toObject(User.class);
+                         user = FirebaseAuth.getInstance().getCurrentUser();
+                         mEditUserName.setText(me.getUsername());
+                        mEditEmail.setText(user.getEmail());
+                        Bitmap bitmap1 = null;
+                       
+                            //System.out.println(user.getPhotoUrl());
+                            Picasso.get().load(me.getProfileUrl())
+                                    .into(mImgPhoto);
+                            //mBtnSelectedPhoto.setAlpha(0);
+
+
+
+
+                    }
+                });
 
 
     }
-
-
 
     public void selecionarFoto(View view) {
         adicionarFoto();
@@ -105,7 +124,7 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
         }
         //caso a foto venha da camesa
         if (requestCode == 1 && resultCode == RESULT_OK) {
-           //pegando o caminho e extraindo a url da foto tirada pela camera
+            //pegando o caminho e extraindo a url da foto tirada pela camera
             File f = new File(currentPhotoPath);
             mSelectUri = Uri.fromFile(f);
             //System.out.println(mSelectUri);
@@ -122,66 +141,95 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
         }
     }
     public void cadastrar(View view) {
-        criarUsuario();
+
+
+
+
+
+        editarUsuario();
     }
 
     //Método para Criar/Registrar usuário
-    private void criarUsuario() {
+    private void editarUsuario() {
         String email = mEditEmail.getText().toString();
         String senha = mEditPassword.getText().toString();
-        String name = mEditUserName.getText().toString();
 
-        //Valida se Nome, Email e senha foram preenchidos.
-        if(email == null || email.isEmpty() || senha == null || senha.isEmpty() || name == null || name.isEmpty()){
-            Toast.makeText(this, "Senha,E-mail ou Nome devem ser preenchidos",Toast.LENGTH_LONG).show();
-            return;
 
-        }
-        //Caso a verificação não retorne erro o novo usuário é inserido no banco
+        boolean emailorsenhaAlterada = false;
 
-        //Módulo do Firebase que Realiza o registro do e-mail e senha
-        FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,senha)
-                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                    @Override
 
-                    //Caso a criação seja feita com sucesso
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if(task.isSuccessful()){
 
-                            //Método para salvar
-                            salvarUsuarioInFirebase();
+        if(!email.equals(user.getEmail())){
+            Toast.makeText(this,email,Toast.LENGTH_LONG).show();
+            user.updateEmail(email)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                //Log.d(TAG, "User email address updated.");
+                            }
+                            else{
+                                if(!task.isSuccessful()) {
+                                    try {
+                                        throw task.getException();
+                                    } catch(FirebaseAuthWeakPasswordException e) {
 
-                        }
-                        else{
-                            if(!task.isSuccessful()) {
-                                try {
-                                    throw task.getException();
-                                } catch(FirebaseAuthWeakPasswordException e) {
+                                        mEditPassword.setError("senha invalida");
+                                        mEditPassword.requestFocus();
+                                    } catch(FirebaseAuthInvalidCredentialsException e) {
+                                        mEditEmail.setError("email invalido");
+                                        mEditEmail.requestFocus();
+                                    } catch(FirebaseAuthUserCollisionException e) {
+                                        mEditEmail.setError("Usuario já existe");
+                                        mEditEmail.requestFocus();
+                                    } catch(Exception e) {
 
-                                    mEditPassword.setError("senha invalida");
-                                    mEditPassword.requestFocus();
-                                } catch(FirebaseAuthInvalidCredentialsException e) {
-                                   mEditEmail.setError("email invalido");
-                                    mEditEmail.requestFocus();
-                                } catch(FirebaseAuthUserCollisionException e) {
-                                   mEditEmail.setError("Usuario já existe");
-                                    mEditEmail.requestFocus();
-                                } catch(Exception e) {
-
+                                    }
                                 }
                             }
+
                         }
-                    }
-                })
-                //Caso a criação falhe
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Log.i("Falhou",e.getMessage());
+                    });
 
-                    }
-                });
+                emailorsenhaAlterada = true;
+        }
 
+
+        if(!senha.equals("")){
+            user = FirebaseAuth.getInstance().getCurrentUser();
+
+            user.updatePassword(senha)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()) {
+                                //Log.d(TAG, "User password updated.");
+                            }
+
+
+                        }
+                    });
+            emailorsenhaAlterada = true;
+
+        }
+
+        //String nova_senha = mEditNewPassword.getText().toString();
+
+        //user = FirebaseAuth.getInstance().getCurrentUser();
+
+
+
+        salvarUsuarioInFirebase();
+
+        if(emailorsenhaAlterada ==true){
+
+            Toast.makeText(this, "usuario atualizado com sucesso", Toast.LENGTH_LONG).show();
+            FirebaseAuth.getInstance().signOut();
+
+
+        }else{
+            Toast.makeText(this, "usuario atualizado com sucesso", Toast.LENGTH_LONG).show();
+        }
     }
 
     //Método que salva arquivos no firebase ( Upload de fotos)
@@ -223,7 +271,7 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
                                         public void onSuccess(Void aVoid) {
 
                                             //Criando Intente para redirecionamento de Tela Após cadastro de usuário
-                                            Intent intent = new Intent(RegistrarUsuarioActivity.this, MensagensActivity.class);
+                                            Intent intent = new Intent(EditarUsuario.this, MensagensActivity.class);
 
                                             //Flags que fazem que as telas sejam movidas
                                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -263,7 +311,7 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
             //String profileUrl = uri.toString();
 
             //Criando Objeto User
-            User user = new User(uid,username);
+            User user = new User(uid,username,me.getProfileUrl());
             //Salva o user no banco de dados como uma coleção no firebase
             FirebaseFirestore.getInstance().collection("users")
                     .document(uid)
@@ -273,7 +321,7 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
                         public void onSuccess(Void aVoid) {
 
                             //Criando Intente para redirecionamento de Tela Após cadastro de usuário
-                            Intent intent = new Intent(RegistrarUsuarioActivity.this, MensagensActivity.class);
+                            Intent intent = new Intent(EditarUsuario.this, MensagensActivity.class);
 
                             //Flags que fazem que as telas sejam movidas
                             intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -309,7 +357,7 @@ public class RegistrarUsuarioActivity extends AppCompatActivity {
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
-               Uri photo = FileProvider.getUriForFile(this,
+                Uri photo = FileProvider.getUriForFile(this,
                         "com.example.chat_mobile.provider",
                         photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photo);
