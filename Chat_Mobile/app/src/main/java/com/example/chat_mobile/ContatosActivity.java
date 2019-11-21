@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -78,7 +79,7 @@ public class ContatosActivity extends AppCompatActivity {
                            User user = doc.toObject(User.class);
                            Log.d("Teste", user.getUsername());
                            //correção mostrando o icone do proprio user logado
-                           //if (!user.getUuid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
+                           if (!user.getUuid().equals(FirebaseAuth.getInstance().getCurrentUser().getUid()))
                            adapter.add(new UserItem(user));
 
                         }
