@@ -9,8 +9,8 @@
 
     <EditText
         android:id="@+id/edit_chat"
-        android:layout_width="265dp"
-        android:layout_height="40dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="5dp"
         android:layout_marginLeft="5dp"
         android:layout_marginBottom="16dp"
@@ -24,8 +24,8 @@
 
     <Button
         android:id="@+id/btn_chat"
-        android:layout_width="wrap_content"
-        android:layout_height="40dp"
+        android:layout_width="91dp"
+        android:layout_height="27dp"
         android:layout_marginEnd="5dp"
         android:layout_marginRight="5dp"
         android:layout_marginBottom="16dp"
@@ -65,11 +65,11 @@
 
     <TextView
         android:id="@+id/txt_status"
-        android:layout_width="85dp"
-        android:layout_height="23dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="252dp"
-        android:layout_marginRight="252dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="28dp"
+        android:layout_marginEnd="192dp"
+        android:layout_marginRight="192dp"
         android:text="STATUS"
         android:textColor="#FFFFFF"
         android:textSize="18sp"

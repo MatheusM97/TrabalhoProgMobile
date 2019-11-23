@@ -12,77 +12,71 @@
 
     <Button
         android:id="@+id/btn_Selecionar_foto"
-        android:layout_width="108dp"
-        android:layout_height="51dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
 
+        android:layout_marginStart="88dp"
+        android:layout_marginLeft="88dp"
+        android:layout_marginTop="24dp"
         android:onClick="selecionarFoto"
         android:text="Galeria"
         android:textColor="@android:color/black"
-        app:layout_constraintBottom_toTopOf="@+id/edit_nome1"
-        app:layout_constraintEnd_toStartOf="@+id/tirarFoto1"
-        app:layout_constraintHorizontal_bias="0.63"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_photo1"
-        app:layout_constraintVertical_bias="0.282" />
+        app:layout_constraintTop_toBottomOf="@+id/img_photo1" />
 
     <EditText
         android:id="@+id/edit_nome1"
-        android:layout_width="377dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
         android:background="@drawable/bg_edittext_rounded"
         android:ems="10"
         android:hint="Name"
         android:inputType="textEmailAddress"
         android:paddingLeft="8dp"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/edit_email1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.974" />
+        app:layout_constraintTop_toBottomOf="@+id/btn_Selecionar_foto" />
 
     <EditText
         android:id="@+id/edit_email1"
-        android:layout_width="377dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:background="@drawable/bg_edittext_rounded"
         android:ems="10"
         android:hint="E-mail"
         android:inputType="textEmailAddress"
         android:paddingLeft="8dp"
         android:textSize="30sp"
-        app:layout_constraintBottom_toTopOf="@+id/edit_password1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.529"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.973" />
+        app:layout_constraintEnd_toEndOf="@+id/edit_nome1"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/edit_nome1"
+        app:layout_constraintTop_toBottomOf="@+id/edit_nome1" />
 
     <EditText
         android:id="@+id/edit_password1"
-        android:layout_width="377dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginLeft="16dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/bg_edittext_rounded"
         android:ems="10"
         android:hint="Password"
         android:inputType="textPassword"
         android:paddingLeft="8dp"
         android:textSize="30sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.614" />
+        app:layout_constraintEnd_toEndOf="@+id/edit_email1"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/edit_email1"
+        app:layout_constraintTop_toBottomOf="@+id/edit_email1" />
 
     <Button
         android:id="@+id/btn_cadastrar1"
-        android:layout_width="174dp"
-        android:layout_height="63dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginLeft="4dp"
-        android:layout_marginBottom="128dp"
+        android:layout_width="125dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="24dp"
         android:background="@drawable/bt_submit"
         android:onClick="cadastrar"
         android:text="@string/insert"
@@ -91,16 +85,15 @@
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/btn_cancelar"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.801"
+        app:layout_constraintStart_toStartOf="@+id/edit_password1"
         app:layout_constraintTop_toBottomOf="@+id/edit_password1"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.017" />
 
     <Button
         android:id="@+id/btn_cancelar"
-        android:layout_width="174dp"
-        android:layout_height="63dp"
-        android:layout_marginBottom="128dp"
+        android:layout_width="122dp"
+        android:layout_height="45dp"
         android:background="@drawable/bt_submit"
         android:onClick="cancel"
         android:text="cancel"
@@ -108,40 +101,36 @@
         android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.869"
+        app:layout_constraintEnd_toEndOf="@+id/edit_password1"
+        app:layout_constraintHorizontal_bias="0.806"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edit_password1"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toTopOf="@+id/btn_cadastrar1"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/tirarFoto1"
-        android:layout_width="96dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="96dp"
         android:layout_marginRight="96dp"
         android:onClick="tirarFoto"
         android:text="Camera"
-        app:layout_constraintBottom_toTopOf="@+id/edit_nome1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/img_photo1"
-        app:layout_constraintVertical_bias="0.297" />
+        app:layout_constraintTop_toBottomOf="@+id/img_photo1" />
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/img_photo1"
         android:layout_width="151dp"
         android:layout_height="150dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/avatarpadrao"
         app:civ_border_color="@color/colorPrimary"
         app:civ_border_width="3dp"
-        app:layout_constraintBottom_toTopOf="@+id/edit_nome1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintEnd_toEndOf="@+id/tirarFoto1"
+        app:layout_constraintHorizontal_bias="0.525"
+        app:layout_constraintStart_toStartOf="@+id/btn_Selecionar_foto"
+        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
