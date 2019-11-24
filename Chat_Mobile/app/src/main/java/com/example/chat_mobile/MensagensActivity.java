@@ -7,7 +7,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -61,9 +60,10 @@ public class MensagensActivity extends AppCompatActivity {
 
                 ContatoItem contatoItem= (ContatoItem)  item;
 
+                System.out.println(contatoItem.contato.getUser());
 
 
-                Toast.makeText(MensagensActivity.this,contatoItem.contato.getUuid() ,Toast.LENGTH_LONG).show();
+                //Toast.makeText(MensagensActivity.this,contatoItem.contato.getUuid() ,Toast.LENGTH_LONG).show();
                 intent.putExtra("user", contatoItem.contato.getUser());
                 startActivity(intent);
                 /*ContatosActivity.UserItem userItem = (ContatosActivity.UserItem)  item;
@@ -87,7 +87,7 @@ public class MensagensActivity extends AppCompatActivity {
         FirebaseFirestore.getInstance().collection("ultimas-mensagens")
                 .document(uid)
                 .collection("contatos")
-                .orderBy("timeStamp", Query.Direction.ASCENDING)
+                .orderBy("timeStamp", Query.Direction.DESCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -98,6 +98,9 @@ public class MensagensActivity extends AppCompatActivity {
                             ) {
                                 if (doc.getType() == DocumentChange.Type.ADDED) {
                                     Contato contato = doc.getDocument().toObject(Contato.class);
+                                    //contato.setUser(null);
+
+                                     contato.atualizarUser();
                                     adapter.add(new ContatoItem(contato));
                                 }
                             }
@@ -151,10 +154,12 @@ public class MensagensActivity extends AppCompatActivity {
     }
 
     private class ContatoItem extends Item<ViewHolder> {
-        private final Contato contato;
+        private  Contato contato;
 
         public ContatoItem(Contato c) {
             this.contato = c;
+           //contato.atualizarUser();
+            //contato.atualizarUser();
         }
 
 
@@ -164,17 +169,20 @@ public class MensagensActivity extends AppCompatActivity {
             TextView mensagem = viewHolder.itemView.findViewById(R.id.mensagem);
             ImageView img = viewHolder.itemView.findViewById(R.id.imageView);
 
-            nomeUsuario.setText(contato.getNomeUsuario());
+            nomeUsuario.setText(contato.getUser().getUsername());
 
             mensagem.setText(contato.getUltimaMensagem());
 
-            if(contato.getFotoURL()==null){
+            if(contato.getUser().getProfileUrl()==null){
                 Picasso.get()
                         .load(R.drawable.avatarpadrao)
                         .into(img);
             }else{
+                //User user = contato.atualizarUser();
+                //user = contato.atualizarUser();
+                contato.setFotoURL(contato.getUser().getProfileUrl());
                 Picasso.get()
-                        .load(contato.getFotoURL())
+                        .load(contato.getUser().getProfileUrl())
                         .into(img);
             }
 
@@ -182,6 +190,7 @@ public class MensagensActivity extends AppCompatActivity {
 
         @Override
         public int getLayout() {
+            //contato.atualizarUser();
             return R.layout.item_mensagem_usuario;
         }
     }

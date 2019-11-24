@@ -1,6 +1,10 @@
 package com.example.chat_mobile;
 
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class Contato {
     private String uuid;
     private String nomeUsuario;
@@ -9,7 +13,7 @@ public class Contato {
     private String fotoURL;
     private User user;
     public Contato() {
-
+            //atualizarUser();
     }
     public Contato(String uuid, String nomeUsuario, String ultimaMensagem, long timeStamp, String fotoURL,User user) {
         this.uuid = uuid;
@@ -81,5 +85,26 @@ public class Contato {
 
     public void setFotoURL(String fotoURL) {
         this.fotoURL = fotoURL;
+    }
+
+    public void atualizarUser(){
+
+        FirebaseFirestore.getInstance().collection("users")
+                .document(uuid)
+                .get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                    user = documentSnapshot.toObject(User.class);
+                        System.out.println(user.getProfileUrl());
+
+                    }
+                });
+        System.out.println(user.getProfileUrl());
+
+        //return user;
     }
 }

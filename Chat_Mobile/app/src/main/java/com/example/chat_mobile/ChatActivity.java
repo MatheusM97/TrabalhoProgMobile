@@ -111,7 +111,7 @@ public class ChatActivity extends AppCompatActivity {
             FirebaseFirestore.getInstance().collection("/conversations")
                     .document(fromId)
                     .collection(toId)
-                    .orderBy("timestamp", Query.Direction.ASCENDING)
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -122,6 +122,7 @@ public class ChatActivity extends AppCompatActivity {
 
                                     if (doc.getType() == DocumentChange.Type.ADDED) {
                                         Message message = doc.getDocument().toObject(Message.class);
+                                        System.out.println(message.getFromId() + " " + message.getText() + " " + message.getTimestamp());
                                         adapter.add(new MessageItem(message));
 
 
