@@ -74,6 +74,7 @@ public class ContatosActivity extends AppCompatActivity {
                         }
 
                         List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                        adapter.clear();
                         for (DocumentSnapshot doc: docs){
 
                            User user = doc.toObject(User.class);

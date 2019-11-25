@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -47,9 +48,11 @@ public class MensagensActivity extends AppCompatActivity {
         rv.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new GroupAdapter();
+        adapter.clear();
         rv.setAdapter(adapter);
 
         rv.setLayoutManager(new LinearLayoutManager(this));
+
         adapter.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(@NonNull Item item, @NonNull View view) {
@@ -91,19 +94,46 @@ public class MensagensActivity extends AppCompatActivity {
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
+                        //adapter.clear();
                         List<DocumentChange> documentChanges = queryDocumentSnapshots.getDocumentChanges();
 
                         if (documentChanges != null) {
+                            //adapter.clear();
                             for (DocumentChange doc : documentChanges
                             ) {
                                 if (doc.getType() == DocumentChange.Type.ADDED) {
-                                    Contato contato = doc.getDocument().toObject(Contato.class);
-                                    //contato.setUser(null);
+                                    final Contato contato = doc.getDocument().toObject(Contato.class);
+                                    FirebaseFirestore.getInstance().collection("/users")
+                                            .addSnapshotListener(new EventListener<QuerySnapshot>() {
+                                                @Override
+                                                public void onEvent(@javax.annotation.Nullable QuerySnapshot queryDocumentSnapshots, @javax.annotation.Nullable FirebaseFirestoreException e) {
 
-                                     contato.atualizarUser();
-                                    adapter.add(new ContatoItem(contato));
+
+                                                    List<DocumentSnapshot> docs = queryDocumentSnapshots.getDocuments();
+                                                    //adapter.clear();
+                                                    for (DocumentSnapshot doc: docs){
+
+                                                        User user = doc.toObject(User.class);
+                                                       if(user.getUuid().equals(contato.getUuid())){
+                                                           contato.setUser(user);
+                                                           adapter.add(new ContatoItem(contato));
+
+                                                       }else {
+                                                           continue;
+                                                       }
+
+                                                    }
+
+                                                }
+                                            });
+
+
+                                    //adapter.add(new ContatoItem(contato));
+
                                 }
+
                             }
+
                         }
                     }
                 });

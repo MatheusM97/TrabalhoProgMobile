@@ -111,7 +111,7 @@ public class ChatActivity extends AppCompatActivity {
             FirebaseFirestore.getInstance().collection("/conversations")
                     .document(fromId)
                     .collection(toId)
-                    .orderBy("timestamp", Query.Direction.DESCENDING)
+                    .orderBy("timestamp", Query.Direction.ASCENDING)
                     .addSnapshotListener(new EventListener<QuerySnapshot>() {
                         @Override
                         public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
@@ -152,8 +152,8 @@ public class ChatActivity extends AppCompatActivity {
 
 
 
-        long  timestamp = tempo.getSeconds();;
-        
+        //long  timestamp = tempo.getSeconds();;
+        long timestamp = System.currentTimeMillis();
         final Message message = new Message();
         message.setFromId(fromId);
         message.setToId(toId);
