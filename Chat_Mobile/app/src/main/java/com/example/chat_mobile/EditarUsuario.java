@@ -413,7 +413,7 @@ public class EditarUsuario extends AppCompatActivity {
                     degree = 90;
                     break;
                 case ExifInterface.ORIENTATION_ROTATE_270:
-                    degree = 270;
+                    degree = 90;
                     break;
                 case ExifInterface.ORIENTATION_UNDEFINED:
                     degree = 0;
